@@ -9,7 +9,7 @@ namespace APIWeb_SPASentirseBien.Models
         public int PreguntaId { get; set; }
         
         [Required]
-        public int UsuarioId { get; set; }
+        public string? UsuarioId { get; set; }
         [Required]
         [ForeignKey("UsuarioId")]
         public Usuario? UsuarioClass { get; set; }

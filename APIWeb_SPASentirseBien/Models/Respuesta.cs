@@ -7,8 +7,9 @@ namespace APIWeb_SPASentirseBien.Models
     {
         [Key]
         public int RespuestaId { get; set; }
+
         [Required]
-        public int UsuarioId { get; set; }
+        public string? UsuarioId { get; set; }
         [Required]
         [ForeignKey("UsuarioId")]
         public Usuario? UsuarioClass { get; set; }
@@ -17,7 +18,7 @@ namespace APIWeb_SPASentirseBien.Models
         public int PreguntaId { get; set; }
         [Required]
         [ForeignKey("PreguntaId")]
-        public Usuario? PreguntaClass { get; set; }
+        public Pregunta? PreguntaClass { get; set; }
 
         [Required]
         [MaxLength(150, ErrorMessage ="La respuesta no puede superar los 150 caracteres.")]
