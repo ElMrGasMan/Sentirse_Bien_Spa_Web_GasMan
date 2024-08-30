@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using APIWeb_SPASentirseBien.Models;
 
 namespace APIWeb_SPASentirseBien.Models.Contexts
 {
@@ -19,5 +20,6 @@ namespace APIWeb_SPASentirseBien.Models.Contexts
                 .HasMany(ut => ut.Turnos)
                 .WithMany(ut => ut.Usuarios);
         }
+        public DbSet<APIWeb_SPASentirseBien.Models.Noticia> Noticia { get; set; } = default!;
     }
 }

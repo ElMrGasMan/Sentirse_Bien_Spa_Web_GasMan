@@ -46,7 +46,7 @@ namespace APIWeb_SPASentirseBien.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Pregunta");
+                    b.ToTable("Pregunta", (string)null);
                 });
 
             modelBuilder.Entity("APIWeb_SPASentirseBien.Models.Resenia", b =>
@@ -76,7 +76,7 @@ namespace APIWeb_SPASentirseBien.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Resenia");
+                    b.ToTable("Resenia", (string)null);
                 });
 
             modelBuilder.Entity("APIWeb_SPASentirseBien.Models.Respuesta", b =>
@@ -105,7 +105,7 @@ namespace APIWeb_SPASentirseBien.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Respuesta");
+                    b.ToTable("Respuesta", (string)null);
                 });
 
             modelBuilder.Entity("APIWeb_SPASentirseBien.Models.Servicio", b =>
@@ -142,7 +142,7 @@ namespace APIWeb_SPASentirseBien.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Servicio");
+                    b.ToTable("Servicio", (string)null);
                 });
 
             modelBuilder.Entity("APIWeb_SPASentirseBien.Models.Turno", b =>
@@ -179,7 +179,7 @@ namespace APIWeb_SPASentirseBien.Migrations
 
                     b.HasIndex("ServicioId");
 
-                    b.ToTable("Turno");
+                    b.ToTable("Turno", (string)null);
                 });
 
             modelBuilder.Entity("APIWeb_SPASentirseBien.Models.Usuario", b =>
@@ -390,7 +390,7 @@ namespace APIWeb_SPASentirseBien.Migrations
 
                     b.HasIndex("UsuariosId");
 
-                    b.ToTable("TurnoUsuario");
+                    b.ToTable("TurnoUsuario", (string)null);
                 });
 
             modelBuilder.Entity("APIWeb_SPASentirseBien.Models.Pregunta", b =>

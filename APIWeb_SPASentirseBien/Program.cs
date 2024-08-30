@@ -10,17 +10,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Identity Core
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdentityCookies();
 builder.Services.AddAuthorization();
-
 builder.Services.AddIdentityCore<Usuario>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddApiEndpoints();
 
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+//DB Context
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
     new MySqlServerVersion(new Version(8, 0, 21))));
+
+//Añadir los controladores
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
@@ -34,5 +41,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapIdentityApi<Usuario>();
+
+app.MapControllers();
 
 app.Run();
