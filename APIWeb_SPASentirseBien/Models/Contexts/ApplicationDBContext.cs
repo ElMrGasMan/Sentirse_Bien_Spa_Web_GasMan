@@ -20,6 +20,8 @@ namespace APIWeb_SPASentirseBien.Models.Contexts
                 .HasMany(ut => ut.Turnos)
                 .WithMany(ut => ut.Usuarios);
         }
-        public DbSet<APIWeb_SPASentirseBien.Models.Noticia> Noticia { get; set; } = default!;
+        public DbSet<Noticia> Noticia { get; set; } = default!;
+        public DbSet<Resenia> Resenia { get; set; } = default!;
+        public DbSet<Pregunta> Pregunta { get; set; } = default!;
     }
 }

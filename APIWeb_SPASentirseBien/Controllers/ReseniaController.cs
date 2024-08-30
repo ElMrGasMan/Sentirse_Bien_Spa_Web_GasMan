@@ -11,66 +11,84 @@ namespace APIWeb_SPASentirseBien.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NoticiaController : ControllerBase
+    public class ReseniaController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
         private readonly IMapper _mapper;
 
-        public NoticiaController(ApplicationDBContext context, IMapper mapper)
+        public ReseniaController(ApplicationDBContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/Noticia
+        // GET: api/Resenia
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<NoticiaDTO>>> GetNoticia()
+        public async Task<ActionResult<IEnumerable<ReseniaDTO>>> GetResenia()
         {
-            var noticias = await _context.Noticia.ToListAsync();
-            var noticiasDTO = _mapper.Map<List<NoticiaDTO>>(noticias);
-            return noticiasDTO;
+            var resenia = await _context.Resenia.ToListAsync();
+            var reseniaDTO = _mapper.Map<List<ReseniaDTO>>(resenia);
+            return reseniaDTO;
         }
 
+        // Limited GET: api/Resenia/limitado
+        [HttpGet("limitado")]
+        public async Task<ActionResult<IEnumerable<ReseniaDTO>>> GetLimitedResenias([FromQuery] int count = 10)
+        {
+            if (count <= 0)
+            {
+                return BadRequest("El parámetro 'count' debe ser mayor que 0.");
+            }
 
-        // GET: api/Noticia/5
+            var resenias = await _context.Resenia
+                                        .OrderByDescending(n => n.ReseniaId) 
+                                        .Take(count)
+                                        .ToListAsync();
+
+            var reseniasDTO = _mapper.Map<List<ReseniaDTO>>(resenias);
+
+            return Ok(reseniasDTO);
+        }
+
+        // GET: api/Resenia/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<NoticiaDTO>> GetNoticia(int id)
+        public async Task<ActionResult<ReseniaDTO>> GetResenia(int id)
         {
-            var noticia = await _context.Noticia.FindAsync(id);
+            var resenia = await _context.Resenia.FindAsync(id);
             
             if (id < 0)
             {
                 return BadRequest();
             }
-            if (noticia == null)
+            if (resenia == null)
             {
                 return NotFound();
             }
 
-            var noticiaDTO = _mapper.Map<NoticiaDTO>(noticia);
-            return noticiaDTO;
+            var reseniaDTO = _mapper.Map<ReseniaDTO>(resenia);
+            return reseniaDTO;
         }
 
-        // PUT: api/Noticia/5
+        // PUT: api/Resenia/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]   
-        public async Task<IActionResult> PutNoticia(int id, NoticiaDTO noticiaDTO)
+        [ProducesResponseType(StatusCodes.Status404NotFound)] 
+        public async Task<IActionResult> PutResenia(int id, ReseniaDTO reseniaDTO)
         {
-            if (id != noticiaDTO.NoticiaId)
+            if (id != reseniaDTO.ReseniaId)
             {
                 return BadRequest();
             }
 
-            var noticia = _mapper.Map<Noticia>(noticiaDTO);
+            var resenia = _mapper.Map<Resenia>(reseniaDTO);
 
-            _context.Entry(noticia).State = EntityState.Modified;
+            _context.Entry(resenia).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +96,7 @@ namespace APIWeb_SPASentirseBien.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NoticiaExists(id))
+                if (!ReseniaExists(id))
                 {
                     return NotFound();
                 }
@@ -91,31 +109,30 @@ namespace APIWeb_SPASentirseBien.Controllers
             return NoContent();
         }
 
-
-        // PATCH: api/Noticia/5
+        // PATCH: api/Resenia/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]   
-        public async Task<IActionResult> PatchNoticia(int id, [FromBody] JsonPatchDocument<NoticiaPatchDTO> noticiaDTOPatch)
+        public async Task<IActionResult> PatchResenia(int id, [FromBody] JsonPatchDocument<ReseniaPatchDTO> reseniaDTOPatch)
         {
-            if (noticiaDTOPatch == null)
+            if (reseniaDTOPatch == null)
             {
                 return BadRequest();
             }
 
-            var noticia = await _context.Noticia.FindAsync(id);
+            var resenia = await _context.Resenia.FindAsync(id);
 
-            if (noticia == null)
+            if (resenia == null)
             {
                 return NotFound();
             }
 
-            var noticiaDTO = _mapper.Map<NoticiaPatchDTO>(noticia);
+            var reseniaDTO = _mapper.Map<ReseniaPatchDTO>(resenia);
 
-            noticiaDTOPatch.ApplyTo(noticiaDTO, ModelState);
-            _mapper.Map(noticiaDTO, noticia);
+            reseniaDTOPatch.ApplyTo(reseniaDTO, ModelState);
+            _mapper.Map(reseniaDTO, resenia);
             
             try
             {
@@ -123,60 +140,60 @@ namespace APIWeb_SPASentirseBien.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NoticiaExists(id)) return NotFound();
+                if (!ReseniaExists(id)) return NotFound();
                 else throw;
             }
 
             return NoContent();
         }
 
-        // POST: api/Noticia
+        // POST: api/Resenia
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<NoticiaDTO>> PostNoticia(NoticiaDTO noticiaDTO)
+        public async Task<ActionResult<ReseniaDTO>> PostResenia(ReseniaDTO reseniaDTO)
         {
-            if (noticiaDTO == null)
+            if (reseniaDTO == null)
             {
                 return BadRequest();
             }
-            var noticia = _mapper.Map<Noticia>(noticiaDTO);
+            var resenia = _mapper.Map<Resenia>(reseniaDTO);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Noticia.Add(noticia);
+            _context.Resenia.Add(resenia);
             await _context.SaveChangesAsync();
 
-            var noticiaToReturn = _mapper.Map<NoticiaDTO>(noticia); 
+            var reseniaToReturn = _mapper.Map<ReseniaDTO>(resenia); 
 
-            return CreatedAtAction("GetNoticia", new { id = noticiaToReturn.NoticiaId }, noticiaToReturn);
+            return CreatedAtAction("Getresenia", new { id = reseniaToReturn.ReseniaId }, reseniaToReturn);
         }
 
-        // DELETE: api/Noticia/5
+        // DELETE: api/Resenia/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteNoticia(int id)
+        public async Task<IActionResult> DeleteResenia(int id)
         {
-            var noticia = await _context.Noticia.FindAsync(id);
-            if (noticia == null)
+            var resenia = await _context.Resenia.FindAsync(id);
+            if (resenia == null)
             {
                 return NotFound();
             }
 
-            _context.Noticia.Remove(noticia);
+            _context.Resenia.Remove(resenia);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool NoticiaExists(int id)
+        private bool ReseniaExists(int id)
         {
-            return _context.Noticia.Any(e => e.NoticiaId == id);
+            return _context.Resenia.Any(e => e.ReseniaId == id);
         }
     }
 }

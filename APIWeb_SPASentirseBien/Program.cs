@@ -12,6 +12,11 @@ builder.Services.AddSwaggerGen();
 
 //Identity Core
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdentityCookies();
+builder.Services.ConfigureApplicationCookie(options => 
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.Expiration = TimeSpan.FromMinutes(120);
+    });
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityCore<Usuario>()
     .AddRoles<IdentityRole>()
@@ -27,7 +32,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     new MySqlServerVersion(new Version(8, 0, 21))));
 
 //Añadir los controladores
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 
 var app = builder.Build();
 

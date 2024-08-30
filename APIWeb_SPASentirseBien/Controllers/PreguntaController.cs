@@ -11,66 +11,86 @@ namespace APIWeb_SPASentirseBien.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NoticiaController : ControllerBase
+    public class PreguntaController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
         private readonly IMapper _mapper;
 
-        public NoticiaController(ApplicationDBContext context, IMapper mapper)
+        public PreguntaController(ApplicationDBContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        // GET: api/Noticia
+        // GET: api/Pregunta
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<NoticiaDTO>>> GetNoticia()
+        public async Task<ActionResult<IEnumerable<PreguntaDTO>>> GetPregunta()
         {
-            var noticias = await _context.Noticia.ToListAsync();
-            var noticiasDTO = _mapper.Map<List<NoticiaDTO>>(noticias);
-            return noticiasDTO;
+            var pregunta = await _context.Pregunta.ToListAsync();
+            var preguntaDTO = _mapper.Map<List<PreguntaDTO>>(pregunta);
+            return preguntaDTO;
         }
 
+        // Limited GET: api/Pregunta/limitado
+        [HttpGet("limitado")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<PreguntaDTO>>> GetLimitedpregunta([FromQuery] int count = 10)
+        {
+            if (count <= 0)
+            {
+                return BadRequest("El parámetro 'count' debe ser mayor que 0.");
+            }
 
-        // GET: api/Noticia/5
+            var pregunta = await _context.Pregunta
+                                        .OrderByDescending(n => n.PreguntaId) 
+                                        .Take(count)
+                                        .ToListAsync();
+
+            var preguntaDTO = _mapper.Map<List<PreguntaDTO>>(pregunta);
+
+            return Ok(preguntaDTO);
+        }
+
+        // GET: api/Pregunta/5
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<NoticiaDTO>> GetNoticia(int id)
+        public async Task<ActionResult<PreguntaDTO>> GetPregunta(int id)
         {
-            var noticia = await _context.Noticia.FindAsync(id);
+            var pregunta = await _context.Pregunta.FindAsync(id);
             
             if (id < 0)
             {
                 return BadRequest();
             }
-            if (noticia == null)
+            if (pregunta == null)
             {
                 return NotFound();
             }
 
-            var noticiaDTO = _mapper.Map<NoticiaDTO>(noticia);
-            return noticiaDTO;
+            var preguntaDTO = _mapper.Map<PreguntaDTO>(pregunta);
+            return preguntaDTO;
         }
 
-        // PUT: api/Noticia/5
+        // PUT: api/Pregunta/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]   
-        public async Task<IActionResult> PutNoticia(int id, NoticiaDTO noticiaDTO)
+        [ProducesResponseType(StatusCodes.Status404NotFound)] 
+        public async Task<IActionResult> PutPregunta(int id, PreguntaDTO preguntaDTO)
         {
-            if (id != noticiaDTO.NoticiaId)
+            if (id != preguntaDTO.PreguntaId)
             {
                 return BadRequest();
             }
 
-            var noticia = _mapper.Map<Noticia>(noticiaDTO);
+            var pregunta = _mapper.Map<Pregunta>(preguntaDTO);
 
-            _context.Entry(noticia).State = EntityState.Modified;
+            _context.Entry(pregunta).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +98,7 @@ namespace APIWeb_SPASentirseBien.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NoticiaExists(id))
+                if (!PreguntaExists(id))
                 {
                     return NotFound();
                 }
@@ -91,31 +111,30 @@ namespace APIWeb_SPASentirseBien.Controllers
             return NoContent();
         }
 
-
-        // PATCH: api/Noticia/5
+        // PATCH: api/Pregunta/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]   
-        public async Task<IActionResult> PatchNoticia(int id, [FromBody] JsonPatchDocument<NoticiaPatchDTO> noticiaDTOPatch)
+        public async Task<IActionResult> PatchPregunta(int id, [FromBody] JsonPatchDocument<PreguntaPatchDTO> preguntaDTOPatch)
         {
-            if (noticiaDTOPatch == null)
+            if (preguntaDTOPatch == null)
             {
                 return BadRequest();
             }
 
-            var noticia = await _context.Noticia.FindAsync(id);
+            var pregunta = await _context.Pregunta.FindAsync(id);
 
-            if (noticia == null)
+            if (pregunta == null)
             {
                 return NotFound();
             }
 
-            var noticiaDTO = _mapper.Map<NoticiaPatchDTO>(noticia);
+            var preguntaDTO = _mapper.Map<PreguntaPatchDTO>(pregunta);
 
-            noticiaDTOPatch.ApplyTo(noticiaDTO, ModelState);
-            _mapper.Map(noticiaDTO, noticia);
+            preguntaDTOPatch.ApplyTo(preguntaDTO, ModelState);
+            _mapper.Map(preguntaDTO, pregunta);
             
             try
             {
@@ -123,60 +142,60 @@ namespace APIWeb_SPASentirseBien.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NoticiaExists(id)) return NotFound();
+                if (!PreguntaExists(id)) return NotFound();
                 else throw;
             }
 
             return NoContent();
         }
 
-        // POST: api/Noticia
+        // POST: api/Pregunta
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<NoticiaDTO>> PostNoticia(NoticiaDTO noticiaDTO)
+        public async Task<ActionResult<Pregunta>> PostPregunta(PreguntaDTO preguntaDTO)
         {
-            if (noticiaDTO == null)
+            if (preguntaDTO == null)
             {
                 return BadRequest();
             }
-            var noticia = _mapper.Map<Noticia>(noticiaDTO);
+            var pregunta = _mapper.Map<Pregunta>(preguntaDTO);
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Noticia.Add(noticia);
+            _context.Pregunta.Add(pregunta);
             await _context.SaveChangesAsync();
 
-            var noticiaToReturn = _mapper.Map<NoticiaDTO>(noticia); 
+            var preguntaToReturn = _mapper.Map<PreguntaDTO>(pregunta); 
 
-            return CreatedAtAction("GetNoticia", new { id = noticiaToReturn.NoticiaId }, noticiaToReturn);
+            return CreatedAtAction("Getpregunta", new { id = preguntaToReturn.PreguntaId }, preguntaToReturn);
         }
 
-        // DELETE: api/Noticia/5
+        // DELETE: api/Pregunta/5
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteNoticia(int id)
+        public async Task<IActionResult> DeletePregunta(int id)
         {
-            var noticia = await _context.Noticia.FindAsync(id);
-            if (noticia == null)
+            var pregunta = await _context.Pregunta.FindAsync(id);
+            if (pregunta == null)
             {
                 return NotFound();
             }
 
-            _context.Noticia.Remove(noticia);
+            _context.Pregunta.Remove(pregunta);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool NoticiaExists(int id)
+        private bool PreguntaExists(int id)
         {
-            return _context.Noticia.Any(e => e.NoticiaId == id);
+            return _context.Pregunta.Any(e => e.PreguntaId == id);
         }
     }
 }
