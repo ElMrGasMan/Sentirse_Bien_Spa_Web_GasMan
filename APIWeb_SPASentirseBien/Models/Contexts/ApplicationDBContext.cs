@@ -13,7 +13,8 @@ namespace APIWeb_SPASentirseBien.Models.Contexts
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
+            //Necesario para definir una relacion de muchos a muchos
             modelBuilder.Entity<Usuario>()
                 .HasMany(ut => ut.Turnos)
                 .WithMany(ut => ut.Usuarios);
