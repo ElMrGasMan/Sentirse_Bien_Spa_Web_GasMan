@@ -154,7 +154,7 @@ namespace APIWeb_SPASentirseBien.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Pregunta>> PostPregunta(PreguntaDTO preguntaDTO)
+        public async Task<ActionResult<PreguntaDTO>> PostPregunta(PreguntaDTO preguntaDTO)
         {
             if (preguntaDTO == null)
             {
@@ -172,7 +172,7 @@ namespace APIWeb_SPASentirseBien.Controllers
 
             var preguntaToReturn = _mapper.Map<PreguntaDTO>(pregunta); 
 
-            return CreatedAtAction("Getpregunta", new { id = preguntaToReturn.PreguntaId }, preguntaToReturn);
+            return CreatedAtAction("GetPregunta", new { id = preguntaToReturn.PreguntaId }, preguntaToReturn);
         }
 
         // DELETE: api/Pregunta/5
