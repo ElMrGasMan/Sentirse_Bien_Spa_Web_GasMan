@@ -15,7 +15,6 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdent
 builder.Services.ConfigureApplicationCookie(options => 
     {
         options.Cookie.HttpOnly = true;
-        options.Cookie.Expiration = TimeSpan.FromMinutes(120);
     });
 builder.Services.AddAuthorization();
 builder.Services.AddIdentityCore<Usuario>()
