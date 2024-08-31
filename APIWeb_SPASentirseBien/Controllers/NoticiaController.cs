@@ -32,6 +32,27 @@ namespace APIWeb_SPASentirseBien.Controllers
             return noticiasDTO;
         }
 
+        // Limited GET: api/Noticia/limitado
+        [HttpGet("limitado")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IEnumerable<NoticiaDTO>>> GetLimitedNoticia([FromQuery] int count = 5)
+        {
+            if (count <= 0)
+            {
+                return BadRequest("El parámetro 'count' debe ser mayor que 0.");
+            }
+
+            var noticia = await _context.Noticia
+                                        .OrderByDescending(n => n.NoticiaId) 
+                                        .Take(count)
+                                        .ToListAsync();
+
+            var noticiaDTO = _mapper.Map<List<NoticiaDTO>>(noticia);
+
+            return Ok(noticiaDTO);
+        }
+
 
         // GET: api/Noticia/5
         [HttpGet("{id}")]
