@@ -1,7 +1,9 @@
 using APIWeb_SPASentirseBien.Models;
 using APIWeb_SPASentirseBien.Models.Contexts;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +13,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Identity Core
-builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme).AddIdentityCookies();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+        };
+    });
 builder.Services.ConfigureApplicationCookie(options => 
     {
-        options.Cookie.HttpOnly = true;
+        options.SlidingExpiration = true;
+        options.LoginPath = "/api/Account/login";  // Especifica la ruta de inicio de sesión
+        options.LogoutPath = "/api/Account/logout"; // Especifica la ruta de cierre de sesión
     });
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityCore<Usuario>()
-    .AddRoles<IdentityRole>()
+builder.Services.AddIdentity<Usuario, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddApiEndpoints();
 
@@ -44,7 +58,48 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<Usuario>();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    string[] roleNames = { "Admin", "Cliente", "Empleado" };
+    IdentityResult roleResult;
+
+    foreach (var roleName in roleNames)
+    {
+        var roleExist = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExist)
+        {
+            // Crear los roles si no existen
+            roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<Usuario>>();
+    string email = "adminUser@thisIsAdmin.com";
+    string password = "835NoOneAdmin047-";
+
+    if (await userManager.FindByEmailAsync(email) == null)
+    {
+        var user = new Usuario
+        {
+            UserName = "Administrator",
+            Email = email
+        };
+
+        await userManager.CreateAsync(user, password);
+        await userManager.AddToRoleAsync(user, "Admin");
+    }
+    
+}
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -6,6 +6,7 @@ using AutoMapper;
 using APIWeb_SPASentirseBien.Models.DTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using APIWeb_SPASentirseBien.Models.DTOs.PatchDTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIWeb_SPASentirseBien.Controllers
 {
@@ -78,6 +79,7 @@ namespace APIWeb_SPASentirseBien.Controllers
 
         // PUT: api/Servicio/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin, Empleado")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -114,6 +116,7 @@ namespace APIWeb_SPASentirseBien.Controllers
 
         // PATCH: api/Servicio/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin, Empleado")]
         [HttpPatch("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -152,6 +155,7 @@ namespace APIWeb_SPASentirseBien.Controllers
 
         // POST: api/Servicio
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Admin, Empleado")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -177,6 +181,7 @@ namespace APIWeb_SPASentirseBien.Controllers
         }
 
         // DELETE: api/Servicio/5
+        [Authorize(Roles = "Admin, Empleado")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
