@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIWeb_SPASentirseBien", "APIWeb_SPASentirseBien.csproj", "{DD912C11-D57B-4BBB-A09E-7A745B587DC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIWeb_SPASentirseBien", "APIWeb_SPASentirseBien.csproj", "{CB54A5A1-51CC-4236-9935-E3BEEF072FE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DD912C11-D57B-4BBB-A09E-7A745B587DC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD912C11-D57B-4BBB-A09E-7A745B587DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD912C11-D57B-4BBB-A09E-7A745B587DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD912C11-D57B-4BBB-A09E-7A745B587DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB54A5A1-51CC-4236-9935-E3BEEF072FE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB54A5A1-51CC-4236-9935-E3BEEF072FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB54A5A1-51CC-4236-9935-E3BEEF072FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB54A5A1-51CC-4236-9935-E3BEEF072FE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EEC2AD7A-7321-41DF-97A3-BFB3263892A4}
+		SolutionGuid = {F1D93C2C-B79E-4295-96C0-F9CB02D6C65E}
 	EndGlobalSection
 EndGlobal
