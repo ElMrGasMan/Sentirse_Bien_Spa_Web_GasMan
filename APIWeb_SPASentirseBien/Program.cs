@@ -1,5 +1,6 @@
 using APIWeb_SPASentirseBien.Models;
 using APIWeb_SPASentirseBien.Models.Contexts;
+using APIWeb_SPASentirseBien.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,21 +44,19 @@ builder.Services.AddIdentity<Usuario, IdentityRole>(options => options.SignIn.Re
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
+
 //DB Context
 builder.Services.AddDbContext<ApplicationDBContext>(options => 
 {
     options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
-    new MySqlServerVersion(new Version(8, 0, 21)),
-    mySqlOptions =>
-            {
-                // Habilita la resiliencia de errores transitorios con 5 intentos
-                mySqlOptions.EnableRetryOnFailure(
-                    maxRetryCount: 5,  // Número máximo de reintentos
-                    maxRetryDelay: TimeSpan.FromSeconds(10),  // Tiempo máximo entre reintentos
-                    errorNumbersToAdd: null  // Opcional: puedes añadir números de error específicos
-                );
-            });
+    new MySqlServerVersion(new Version(8, 0, 21)));
 });
+
+
+//Email Service
+builder.Services.Configure<SMTPSettingsModel>(builder.Configuration.GetSection("SmtpSettings"));
+builder.Services.AddTransient<EmailService>();
+
 
 //Añadir los controladores
 builder.Services.AddControllers().AddNewtonsoftJson();
