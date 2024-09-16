@@ -226,7 +226,6 @@
             </div>
         </section>
 
-       
         <!-- Pestaña Contactos -->
         <section id="contactos" class="contact-section">
             <div class="contact-info">
@@ -255,37 +254,39 @@
                     <div class="input-group" id="guestUserSection">
                         <div class="input-group">
                             <label for="nombre">Nombre</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="ej.: María">
+                            <input type="text" id="nombre" name="nombre" placeholder="ej.: María" required>
                         </div>
                         <div class="input-group">
                             <label for="apellido">Apellido</label>
-                            <input type="text" id="apellido" name="apellido" placeholder="ej.: Pérez">
+                            <input type="text" id="apellido" name="apellido" placeholder="ej.: Pérez" required>
                         </div>
                         <div class="input-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="ej.: tuemail@email.com">
+                            <input type="email" id="email" name="email" placeholder="ej.: tuemail@email.com" required>
                         </div>
                     </div>
-
-
                     <!-- Sección siempre visible -->
                     <div class="input-group">
                         <label for="telefono">Teléfono</label>
-                        <input type="tel" id="telefono" name="telefono" placeholder="ej.: 1123445567">
+                        <input type="tel" id="telefono" name="telefono" placeholder="ej.: 1123445567" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="asunto">Asunto</label>
+                        <input type="text" id="asunto" name="asunto" placeholder="ej.: Consulta general" required>
                     </div>
                     <div class="input-group">
                         <label for="mensaje">Mensaje</label>
-                        <textarea id="mensaje" name="mensaje" placeholder="ej.: Tu mensaje"></textarea>
+                        <textarea id="mensaje" name="mensaje" placeholder="ej.: Tu mensaje" required></textarea>
                     </div>
                     <div class="input-group">
                         <label for="verification">Verificación</label>
-                        <input type="text" id="verification" name="verification" placeholder="Escribe la palabra clave: SPASB">
-                    </div>                    
+                        <input type="text" id="verification" name="verification" placeholder="Escribe la palabra clave: SPASB" required>
+                    </div>
                     <button type="submit">Enviar</button>
                     <div class="notification success" id="successNotification">Mensaje enviado correctamente</div>
                     <div class="notification error" id="errorNotification">Error al enviar el mensaje</div>
                 </form>
-            </div>
+            </div>            
         </section>
     </main>
     <!-- Pie de Página -->
@@ -299,11 +300,11 @@
             <p>Logo, número de teléfono, etc.</p>
         </div>
     </footer>
-    <script src="./JS/contactos.js"></script>
     <script src="./JS/noticia.js"></script>
     <script src="./JS/preguntas_resenas.js"></script>
     <script src="./JS/tipoDeServicio.js"></script>
     <script src="./JS/main.js"></script>
+    <script src="./JS/formContacto.js"></script>
 
 </body>
 </html>
