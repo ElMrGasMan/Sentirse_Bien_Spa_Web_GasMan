@@ -50,7 +50,7 @@ document.querySelector('.form_container_Registro').addEventListener('submit',asy
     };
 
     try {
-        const response = await fetch('https://www.ApiSpaDemo.somee.com/api/Account/register', {
+        const response = await fetch('https://localhost:7034/api/Account/register', {
             method: 'POST', // El método debe ser POST para el registro
             credentials: 'include', // Esto asegura que las cookies se envíen con la solicitud
             headers: {
@@ -111,7 +111,7 @@ const datosUsuario = {
 
     try{
         //Petición POST
-        const response = await fetch('https://www.ApiSpaDemo.somee.com/api/Account/login', {
+        const response = await fetch('https://localhost:7034/api/Account/login', {
             method: 'POST',
             credentials: "include",
             headers: {
@@ -170,7 +170,7 @@ function deleteCookie(name) {
 
 async function logout() {
     try {
-        const response = await fetch('https://www.ApiSpaDemo.somee.com/api/Account/logout', {
+        const response = await fetch('https://localhost:7034/api/Account/logout', {
             method: 'POST', // Debe ser POST para logout
             credentials: 'include',
             headers: {

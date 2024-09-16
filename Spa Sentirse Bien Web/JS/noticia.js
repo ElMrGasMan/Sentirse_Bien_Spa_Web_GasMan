@@ -1,84 +1,68 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const noticias = [
-      { 
-        title: 'Descubre los secretos para mantener una piel radiante y saludable sin salir de tu hogar', 
-        date: '2024-09-05',
-        type: 'noticia',
-        imageUrl: '/sources/Noticias/consejosParaLaPielImagen.jpg',
-        pdfUrl: '/sources/Noticias/5ConsejosParaCuidadoPiel-1.pdf' 
-      },
-      { 
-        title: 'Descubre la innovadora terapia que combina tecnología avanzada y ingredientes naturales para dejar tu piel resplandeciente y lista para el verano.', 
-        date: '2023-12-10',
-        type: 'nuevo tratamiento',
-        imageUrl: '/sources/Noticias/verano.jpg',
-        pdfUrl: '/sources/Noticias/NuevoTratamientoTemporada_VeranoRadiante-1.pdf' 
-      },
-      { 
-        title: 'Celebra el amor en nuestro Día de Spa para Parejas este 14 de Febrero', 
-        date: '2024-01-12',
-        type: 'promociones',
-        imageUrl: '/sources/Noticias/SanValentin.jpg',
-        pdfUrl: '/sources/Noticias/ServicioEspecialDiaDeSanValentin.pdf' 
-      },
-      { 
-        title: 'Renueva tu ser: Las últimas tendencias en relajación y bienestar para 2024', 
-        date: '2024-02-03',
-        type: 'noticias',
-        imageUrl: '/sources/Noticias/Tendencias.jpg',
-        pdfUrl: '/sources/Noticias/UltimasTendencias2024.pdf' 
-      }
-    ];
-  
-    const carrusel = document.querySelector('.carrusel');
-    const prevButton = document.querySelector('.prev');
-    const nextButton = document.querySelector('.next');
-  
-    let index = 0;
-    const noticiasVisibles = 3;
-  
-    function createNoticiaElement(noticia) {
+  const carrusel = document.querySelector('.carrusel');
+  const prevButton = document.querySelector('.prev');
+  const nextButton = document.querySelector('.next');
+  let noticias = []; // Se inicializa vacío para almacenar las noticias de la API
+  let index = 0;
+  const noticiasVisibles = 3;
+
+  // Función para crear un elemento de noticia
+  function createNoticiaElement(noticia) {
       const noticiaElement = document.createElement('div');
       noticiaElement.classList.add('noticia_op');
       
       noticiaElement.innerHTML = `
-        <div class="imagen_noticia">
-          <img src="${noticia.imageUrl}" alt="${noticia.title}">
-        </div>
-        <div class="descripcion_noticia">
-          <h4>${noticia.type}</h4>
-          <p>Fecha: ${noticia.date}</p>
-          <h1>${noticia.title}</h1>
-        </div>
+          <div class="imagen_noticia">
+              <img src="${noticia.rutaImagen}" alt="${noticia.titulo}">
+          </div>
+          <div class="descripcion_noticia">
+              <p>Fecha: ${noticia.fechaPublicacion}</p>
+              <h1>${noticia.titulo}</h1>
+          </div>
       `;
       
       noticiaElement.addEventListener('click', () => {
-        window.open(noticia.pdfUrl, '_blank'); // Abre el PDF en una nueva pestaña
+          window.open(noticia.rutaPDF, '_blank'); // Abre el PDF en una nueva pestaña
       });
-  
+
       return noticiaElement;
-    }
-  
-    function mostrarNoticias() {
+  }
+
+  // Función para mostrar las noticias en el carrusel
+  function mostrarNoticias() {
       carrusel.innerHTML = '';
       for (let i = 0; i < noticiasVisibles; i++) {
-        const noticiaIndex = (index + i) % noticias.length;
-        const noticiaElement = createNoticiaElement(noticias[noticiaIndex]);
-        carrusel.appendChild(noticiaElement);
+          const noticiaIndex = (index + i) % noticias.length;
+          const noticiaElement = createNoticiaElement(noticias[noticiaIndex]);
+          carrusel.appendChild(noticiaElement);
       }
-    }
-  
-    prevButton.addEventListener('click', () => {
+  }
+
+  prevButton.addEventListener('click', () => {
       index = (index - 1 + noticias.length) % noticias.length;
       mostrarNoticias();
-    });
-  
-    nextButton.addEventListener('click', () => {
+  });
+
+  nextButton.addEventListener('click', () => {
       index = (index + 1) % noticias.length;
       mostrarNoticias();
-    });
-  
-    // Inicializa el carrusel mostrando las primeras noticias
-    mostrarNoticias();
   });
-  
+
+  // Función para obtener noticias de la API usando fetch
+  async function obtenerNoticias() {
+      try {
+          const response = await fetch('https://localhost:7034/api/Noticia'); // Reemplaza con la URL de tu API
+          if (!response.ok) {
+              throw new Error(`Error: ${response.statusText}`);
+          }
+          noticias = await response.json(); // Asigna las noticias obtenidas al arreglo noticias
+          mostrarNoticias(); // Muestra las noticias en el carrusel
+      } catch (error) {
+          console.error('Error al obtener las noticias:', error);
+      }
+  }
+
+  // Llamada a la función para obtener las noticias de la API al cargar la página
+  obtenerNoticias();
+});
+
